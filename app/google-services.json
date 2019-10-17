@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1057721231586",
+    "firebase_url": "https://bookreads-2fc33.firebaseio.com",
+    "project_id": "bookreads-2fc33",
+    "storage_bucket": "bookreads-2fc33.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1057721231586:android:8fbbb4f023ba273a2e16bb",
+        "android_client_info": {
+          "package_name": "com.example.book_read_test"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1057721231586-34cd7g9btf9t216qssp03sd1euei55a0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.book_read_test",
+            "certificate_hash": "02dd86e5de1de4339ad1889bc7ef93bda2551fbe"
+          }
+        },
+        {
+          "client_id": "1057721231586-7cq98qeom7lr64plqkcph177jb6vfl1b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRJZ2uruBBeBKv2v8vdRqhYl-jP7jK0io"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1057721231586-7cq98qeom7lr64plqkcph177jb6vfl1b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

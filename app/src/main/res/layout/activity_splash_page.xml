@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#080808"
+    tools:context=".SplashPage" >
+    <LinearLayout android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="209dp"
+            android:layout_height="91dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center"
+            android:layout_marginStart="128dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="105dp"
+            android:layout_marginBottom="359dp"
+            android:fontFamily="@font/nunito"
+            android:includeFontPadding="true"
+            android:shadowColor="#00000000"
+            android:text="Book Reads"
+            android:textColor="#f2f5df"
+            android:textSize="30sp" />
+
+    </LinearLayout>
+
+</RelativeLayout>
