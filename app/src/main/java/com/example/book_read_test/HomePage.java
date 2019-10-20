@@ -1,5 +1,6 @@
 package com.example.book_read_test;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -10,17 +11,21 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import org.w3c.dom.Text;
 
-public class HomePage extends AppCompatActivity {
+public class HomePage extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, NavigationView.OnNavigationItemSelectedListener {
 //    Button logout_btn;
     TextView welcome_text;
     private DrawerLayout drawer;
@@ -37,27 +42,34 @@ public class HomePage extends AppCompatActivity {
 
         drawer = findViewById(R.id.drawer_layout);
 
+        NavigationView navigationView  = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawer, toolbar , R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close);
 
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+    }
 
-//        logout_btn = findViewById(R.id.logout_btn);
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseUser = firebaseAuth.getCurrentUser();
-//        welcome_text = findViewById(R.id.welcome_text);
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
-//        welcome_text.setText("Welcome "+firebaseUser.getEmail());
+        switch (menuItem.getItemId())
+        {
+            case R.id.nav_logout:
+            {
+                FirebaseAuth.getInstance().signOut();
+                finish();
+                startActivity(new Intent(HomePage.this , LoginPage.class));
 
-//        logout_btn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                firebaseAuth.signOut();
-//                startActivity(new Intent(HomePage.this , LoginPage.class));
-//
-//            }
-//        });
+                break;
+            }
+        }
+
+            drawer.closeDrawer(GravityCompat.START);
+
+        return true;
     }
 
     public void onBackPressed()
