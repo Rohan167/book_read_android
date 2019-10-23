@@ -65,6 +65,13 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
 
                 break;
             }
+            case R.id.nav_profile:
+            {
+                finish();
+                startActivity(new Intent(HomePage.this , ProfilePage.class));
+
+                break;
+            }
         }
 
             drawer.closeDrawer(GravityCompat.START);
