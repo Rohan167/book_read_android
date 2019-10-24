@@ -21,73 +21,12 @@
             android:background="@color/colorPrimary"
             android:elevation="4dp"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"></androidx.appcompat.widget.Toolbar>
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
-
-        <androidx.cardview.widget.CardView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/homePostRecyclerView"
             android:layout_width="match_parent"
-            android:layout_marginRight="30dp"
-            android:layout_marginTop="30dp"
-            app:cardCornerRadius="8dp"
-            android:layout_marginLeft="30dp"
-            android:layout_height="173dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="215dp"
-                android:background="@color/white"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="30dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginRight="30dp"
-                    android:orientation="horizontal"></LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/book_title"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:fontFamily="@font/nunito"
-                        android:text="To Kill a Mocking Bird"
-                        android:textSize="18sp" />
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <ImageView
-                            android:id="@+id/book_image"
-                            android:layout_width="93dp"
-                            android:layout_height="92dp"
-                            android:layout_alignParentStart="true"
-                            android:layout_alignParentEnd="true"
-                            android:layout_marginStart="2dp"
-                            android:layout_marginEnd="118dp"
-                            android:src="@drawable/ic_book" />
-                    </RelativeLayout>
-
-                    <TextView
-                        android:id="@+id/book_comment"
-                        android:layout_width="213dp"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/nunito"
-                        android:text="Readable"
-                        android:textSize="18sp" />
-
-                </LinearLayout>
-            </LinearLayout>
-
-
-        </androidx.cardview.widget.CardView>
+            android:layout_height="match_parent" />
 
 
     </LinearLayout>
