@@ -135,7 +135,8 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
                             for (QueryDocumentSnapshot doc : task.getResult()) {
                                 Posts posts = new Posts(
                                     doc.getString("booktitle"),
-                                    doc.getString("bookdesc")
+                                    doc.getString("bookdesc"),
+                                        doc.getId()
                                 );
 
                                 postsStack.add(posts);

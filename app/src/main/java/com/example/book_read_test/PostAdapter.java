@@ -33,6 +33,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         holder.bookTitle.setText(postsStack.get(position).getBookName());
         holder.bookDescription.setText(postsStack.get(position).getBookDescription());
+        holder.id_view.setText(postsStack.get(position).getDocId());
     }
 
     @Override
@@ -42,13 +43,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
     class PostViewHolder extends RecyclerView.ViewHolder {
 
-        TextView bookTitle, bookDescription;
+        TextView bookTitle, bookDescription , id_view;
 
         public PostViewHolder(@NonNull View itemView) {
             super(itemView);
 
             bookTitle = itemView.findViewById(R.id.book_title);
             bookDescription = itemView.findViewById(R.id.book_description);
+            id_view  = itemView.findViewById(R.id.id_view);
         }
     }
 }

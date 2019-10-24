@@ -4,12 +4,14 @@ public class Posts {
 
     private String bookTitle;
     private String bookDescription;
+    private String docId;
 
     public Posts() {}
 
-    public Posts(String bookname, String bookdesc) {
+    public Posts(String bookname, String bookdesc ,String docId) {
         this.bookTitle = bookname;
         this.bookDescription = bookdesc;
+        this.docId = docId;
     }
 
 
@@ -27,5 +29,9 @@ public class Posts {
 
     public void setBookDescription(String bookDescription) {
         this.bookDescription = bookDescription;
+    }
+
+    public String getDocId() {
+        return docId;
     }
 }
