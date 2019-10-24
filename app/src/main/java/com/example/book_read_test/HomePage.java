@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -37,7 +38,7 @@ import org.w3c.dom.Text;
 
 import java.util.Stack;
 
-public class HomePage extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, NavigationView.OnNavigationItemSelectedListener {
+public class HomePage extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, NavigationView.OnNavigationItemSelectedListener{
 //    Button logout_btn;
     TextView welcome_text;
     private DrawerLayout drawer;
@@ -48,11 +49,11 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
     Stack<Posts> postsStack;
     PostAdapter postAdapter;
     RecyclerView homePostRecyclerView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
+
 
         firestore = FirebaseFirestore.getInstance();
         collectionNames = new CollectionNames();
@@ -60,6 +61,7 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
         homePostRecyclerView = findViewById(R.id.homePostRecyclerView);
         homePostRecyclerView.setHasFixedSize(true);
         homePostRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
 
         Toolbar  toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -129,7 +131,7 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
         firestore.collection(collectionNames.getPostCollection()).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    public void onComplete(@NonNull final Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
 
                             for (QueryDocumentSnapshot doc : task.getResult()) {
@@ -145,6 +147,18 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
                             postAdapter = new PostAdapter(HomePage.this, postsStack);
                             homePostRecyclerView.setAdapter(postAdapter);
 
+                            postAdapter.setOnItemClickListener(new PostAdapter.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(int position) {
+
+                                    String val = postsStack.get(position).getDocId();
+                                    startActivity(new Intent(HomePage.this , PostView.class).putExtra("Id" , val));
+
+
+
+                                }
+                            });
+
                         }
                     }
                 })
@@ -155,4 +169,5 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
             }
         });
     }
+
 }

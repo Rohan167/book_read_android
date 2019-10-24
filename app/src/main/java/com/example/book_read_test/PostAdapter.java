@@ -17,6 +17,18 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     HomePage homepageActivity;
     Stack<Posts> postsStack;
 
+    private OnItemClickListener mListener;
+
+    public interface OnItemClickListener
+    {
+        void onItemClick(int position);
+    }
+
+    public void setOnItemClickListener (OnItemClickListener listener)
+    {
+        mListener = listener;
+    }
+
     public PostAdapter(HomePage homepage, Stack<Posts> posts) {
         this.homepageActivity = homepage;
         this.postsStack = posts;
@@ -26,7 +38,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     @NonNull
     @Override
     public PostViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new PostViewHolder(LayoutInflater.from(homepageActivity).inflate(R.layout.list_layout, parent, false));
+        View v = LayoutInflater.from(homepageActivity).inflate(R.layout.list_layout, parent, false);
+        PostViewHolder evh = new PostViewHolder(v , mListener);
+        return evh;
     }
 
     @Override
@@ -45,12 +59,28 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
         TextView bookTitle, bookDescription , id_view;
 
-        public PostViewHolder(@NonNull View itemView) {
+        public PostViewHolder(@NonNull View itemView , final OnItemClickListener listener) {
             super(itemView);
 
             bookTitle = itemView.findViewById(R.id.book_title);
             bookDescription = itemView.findViewById(R.id.book_description);
             id_view  = itemView.findViewById(R.id.id_view);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if (listener != null)
+                    {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION)
+                        {
+                            listener.onItemClick(position);
+                        }
+                    }
+
+                }
+            });
         }
     }
 }

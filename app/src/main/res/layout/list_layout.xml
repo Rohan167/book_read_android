@@ -6,6 +6,7 @@
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/card_add"
         android:layout_width="match_parent"
         android:layout_marginRight="30dp"
         android:layout_marginTop="30dp"

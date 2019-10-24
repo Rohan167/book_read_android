@@ -1,5 +1,9 @@
 package com.example.book_read_test.models;
 
+import android.content.Intent;
+
+import com.example.book_read_test.PostView;
+
 public class Posts {
 
     private String bookTitle;
