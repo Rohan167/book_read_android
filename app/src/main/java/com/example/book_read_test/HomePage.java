@@ -150,9 +150,20 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
                             postAdapter.setOnItemClickListener(new PostAdapter.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(int position) {
+//                                        Stack <String> send_dat = new Stack<>();
+//
+//                                    for (QueryDocumentSnapshot val : task.getResult())
+//                                    {
+//                                        send_dat.add(val.getString("booktitle"));
+//                                        send_dat.add(val.getString("bookdesc"));
+//                                        send_dat.add(val.getId());
+//
+//                                    }
 
                                     String val = postsStack.get(position).getDocId();
-                                    startActivity(new Intent(HomePage.this , PostView.class).putExtra("Id" , val));
+                                    String book_name = postsStack.get(position).getBookName();
+                                    String book_desc = postsStack.get(position).getBookDescription();
+                                    startActivity(new Intent(HomePage.this , PostView.class).putExtra("Id" , val).putExtra("name" , book_name).putExtra("desc",book_desc));
 
 
 
