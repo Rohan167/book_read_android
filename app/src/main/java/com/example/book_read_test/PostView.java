@@ -12,9 +12,12 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.auth.User;
 
 import java.util.ArrayList;
 
@@ -61,9 +64,18 @@ public class PostView extends AppCompatActivity {
             public void onClick(View view) {
                 String val = bookname_view.getText().toString();
 
-//                getDocIdUpd(val);
+                update_data(val);
             }
         });
+
+
+
+    }
+
+    private void update_data(String val) {
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference();
 
 
 
@@ -80,12 +92,6 @@ public class PostView extends AppCompatActivity {
                 });
     }
 
-//    public void updateData(String id)
-//    {
-//        startActivity(new Intent());
-//
-//
-//    }
 
 
     public void getDocIdDel(String value) {
@@ -106,22 +112,4 @@ public class PostView extends AppCompatActivity {
 
     }
 
-//    public void getDocIdUpd(String value)
-//    {
-//        final String[] itemID = {null};
-//
-//
-//        firestore.collection("posts").whereEqualTo("booktitle", value).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                if (task.isSuccessful()) {
-//                    for (QueryDocumentSnapshot doc : task.getResult()) {
-//                        itemID[0] = doc.getId();
-//                    }
-//                    updateData(itemID[0]);
-//                }
-//            }
-//        });
-//
-//    }
 }

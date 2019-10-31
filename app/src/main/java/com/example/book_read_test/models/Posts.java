@@ -3,6 +3,10 @@ package com.example.book_read_test.models;
 import android.content.Intent;
 
 import com.example.book_read_test.PostView;
+import com.google.firebase.firestore.Exclude;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Posts {
 
@@ -37,5 +41,16 @@ public class Posts {
 
     public String getDocId() {
         return docId;
+    }
+
+    @Exclude
+    public Map<String , Object> toMap()
+    {
+        HashMap<String , Object> result = new HashMap<>();
+
+        result.put("bookdesc" , bookDescription);
+        result.put("booktitle", bookTitle);
+
+        return result;
     }
 }
