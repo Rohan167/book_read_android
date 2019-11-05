@@ -27,20 +27,17 @@
             android:scaleType="centerInside"
             android:src="@drawable/ic_user" />
 
-        <EditText
+        <TextView
             android:id="@+id/user_text"
-            android:layout_width="121dp"
-            android:layout_height="wrap_content"
+            android:layout_width="78dp"
+            android:layout_height="35dp"
+            android:textSize="18dp"
+            android:textColor="@color/white"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginEnd="135dp"
-            android:layout_marginBottom="-13dp"
-            android:ems="10"
-            android:fontFamily="@font/nunito"
-            android:inputType="textPersonName"
-            android:text="Rohan"
-            android:textColor="@color/white"
-            android:textSize="24sp" />
+            android:layout_marginEnd="168dp"
+            android:layout_marginBottom="7dp" />
+
     </RelativeLayout>
 
     <EditText
