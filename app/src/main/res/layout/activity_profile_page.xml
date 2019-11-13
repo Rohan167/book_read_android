@@ -31,12 +31,23 @@
             android:id="@+id/user_text"
             android:layout_width="78dp"
             android:layout_height="35dp"
-            android:textSize="18dp"
-            android:textColor="@color/white"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_marginEnd="168dp"
-            android:layout_marginBottom="7dp" />
+            android:layout_marginBottom="7dp"
+            android:fontFamily="@font/nunito"
+            android:textColor="@color/white"
+            android:textSize="20dp" />
+
+        <ImageButton
+            android:id="@+id/profileImgChngBtn"
+            android:layout_width="45dp"
+            android:layout_height="35dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="265dp"
+            android:layout_marginBottom="32dp"
+            app:srcCompat="@android:drawable/ic_menu_camera" />
 
     </RelativeLayout>
 
@@ -73,6 +84,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="160dp"
         android:layout_marginBottom="169dp"
+        android:fontFamily="@font/nunito"
         android:text="save" />
 
 </RelativeLayout>

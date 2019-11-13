@@ -4,12 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,12 +35,17 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.auth.User;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
 public class ProfilePage extends AppCompatActivity {
+
+
+    private static final int PICK_IMAGE_REQUEST = 1;
 
     Button save_btn;
     EditText profile_name, profile_password;
@@ -47,7 +54,12 @@ public class ProfilePage extends AppCompatActivity {
     CollectionNames collectionNames;
     FirebaseUser firebaseUser;
     FirebaseFirestore firestore;
+    FirebaseStorage firebaseStorage;
+    StorageReference storageReference;
+    Task<Uri> imgUploadTask;
+    ImageButton profileImgChngBtn;
     String username, uid;
+    Uri imgUri;
 
 
 
@@ -60,12 +72,20 @@ public class ProfilePage extends AppCompatActivity {
         profile_name = findViewById(R.id.profile_name);
         profile_password = findViewById(R.id.profile_password);
         user_text = findViewById(R.id.user_text);
+        profileImgChngBtn = findViewById(R.id.profileImgChngBtn);
 
         firestore = FirebaseFirestore.getInstance();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         collectionNames = new CollectionNames();
 
         getUserData();
+
+        save_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ProfilePage.this , HomePage.class));
+            }
+        });
 
 
     }

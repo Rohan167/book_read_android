@@ -163,6 +163,7 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
                                     String val = postsStack.get(position).getDocId();
                                     String book_name = postsStack.get(position).getBookName();
                                     String book_desc = postsStack.get(position).getBookDescription();
+                                    Posts get_pos = postsStack.get(position);
                                     startActivity(new Intent(HomePage.this , PostView.class).putExtra("Id" , val).putExtra("name" , book_name).putExtra("desc",book_desc));
 
 

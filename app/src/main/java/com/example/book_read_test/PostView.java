@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.book_read_test.models.Posts;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,15 +31,16 @@ public class PostView extends AppCompatActivity {
     FirebaseUser firebaseUser;
 
     Button del_btn , updt_btn;
+    String book_name, book_desc , book_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_view);
 
-        final String book_name = getIntent().getStringExtra("name");
-        String book_desc = getIntent().getStringExtra("desc");
-        String book_id = getIntent().getStringExtra("Id");
+        book_name = getIntent().getStringExtra("name");
+        book_desc = getIntent().getStringExtra("desc");
+        book_id = getIntent().getStringExtra("Id");
 
 
         firestore = FirebaseFirestore.getInstance();
@@ -65,9 +67,8 @@ public class PostView extends AppCompatActivity {
         updt_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String val = bookname_view.getText().toString();
-
-                update_data(val);
+                String val = id_view.getText().toString();
+                startActivity(new Intent(PostView.this , UpdatePost.class).putExtra("bookid", val));
             }
         });
 
@@ -75,17 +76,10 @@ public class PostView extends AppCompatActivity {
 
     }
 
-    private void update_data(String val) {
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference();
-
-
-
-    }
 
     public void deleteData(String id) {
-        firestore.collection("posts").document(id).delete()
+        Posts p = new Posts(book_name , book_desc , book_id);
+        firestore.collection("posts").document(p.getDocId()).delete()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {

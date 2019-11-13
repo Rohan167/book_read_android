@@ -43,6 +43,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="110dp"
         android:layout_marginBottom="227dp"
+        android:fontFamily="@font/nunito"
         android:text="Delete" />
 
     <Button
@@ -52,9 +53,10 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="108dp"
-        android:layout_marginEnd="113dp"
-        android:layout_marginBottom="142dp"
+        android:layout_marginStart="110dp"
+        android:layout_marginEnd="111dp"
+        android:layout_marginBottom="168dp"
+        android:fontFamily="@font/nunito"
         android:text="Update" />
 
 </RelativeLayout>
