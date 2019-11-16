@@ -4,24 +4,20 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.book_read_test.models.Posts;
+import com.example.book_read_test.models.Users;
 import com.example.book_read_test.utils.CollectionNames;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -30,11 +26,10 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import org.w3c.dom.Text;
 
 import java.util.Stack;
 
@@ -42,11 +37,14 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
 //    Button logout_btn;
     TextView welcome_text;
     private DrawerLayout drawer;
+    ImageView image_nav_view;
+    TextView user_nav_text;
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
     FirebaseFirestore firestore;
     CollectionNames collectionNames;
     Stack<Posts> postsStack;
+    Stack usersStack;
     PostAdapter postAdapter;
     RecyclerView homePostRecyclerView;
     @Override
@@ -56,11 +54,13 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
 
 
         firestore = FirebaseFirestore.getInstance();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         collectionNames = new CollectionNames();
         postsStack = new Stack<>();
         homePostRecyclerView = findViewById(R.id.homePostRecyclerView);
         homePostRecyclerView.setHasFixedSize(true);
         homePostRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
 
 
         Toolbar  toolbar = findViewById(R.id.toolbar);
@@ -71,14 +71,18 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
         NavigationView navigationView  = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        android.view.View navHeaderView = navigationView.getHeaderView(0);
+
+        image_nav_view = navHeaderView.findViewById(R.id.image_nav_view);
+        user_nav_text = navHeaderView.findViewById(R.id.user_nav_text);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawer, toolbar , R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close);
 
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
-
         getAllPosts();
+        getUserDets();
     }
 
     @Override
@@ -180,6 +184,21 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
                 Log.d("HOME DATA RETRIVE ", e.getMessage());
             }
         });
+    }
+
+    public void getUserDets()
+    {
+        firestore.collection(collectionNames.getUserCollection()).document(firebaseUser.getUid())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        Users user = task.getResult().toObject(Users.class);
+
+                        user_nav_text.setText(user.getUsername());
+
+                    }
+                });
     }
 
 }

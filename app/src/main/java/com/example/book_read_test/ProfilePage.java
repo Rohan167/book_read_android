@@ -38,6 +38,7 @@ import com.google.firebase.firestore.auth.User;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -48,7 +49,7 @@ public class ProfilePage extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 1;
 
     Button save_btn;
-    EditText profile_name, profile_password;
+    EditText profile_name, profile_password , profile_email;
     TextView user_text;
     FirebaseAuth firebaseAuth;
     CollectionNames collectionNames;
@@ -71,6 +72,7 @@ public class ProfilePage extends AppCompatActivity {
         save_btn = findViewById(R.id.save_profile);
         profile_name = findViewById(R.id.profile_name);
         profile_password = findViewById(R.id.profile_password);
+        profile_email = findViewById(R.id.email_nav_text);
         user_text = findViewById(R.id.user_text);
         profileImgChngBtn = findViewById(R.id.profileImgChngBtn);
 
@@ -80,12 +82,45 @@ public class ProfilePage extends AppCompatActivity {
 
         getUserData();
 
+
         save_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(ProfilePage.this , HomePage.class));
+                String profile_nm = profile_name.getText().toString().trim();
+                String profile_pass = profile_password.getText().toString().trim();
+                String profile_mail = profile_email.getText().toString().trim();
+                if (profile_nm.isEmpty() || profile_pass.isEmpty())
+                {
+                    Toast.makeText(ProfilePage.this , "ENter Cred" , Toast.LENGTH_LONG).show();
+                    return;
+                }
+                updateUser(profile_nm , profile_pass  , profile_mail);
             }
         });
+
+
+    }
+
+    private void updateUser(String profile_name, String profile_pass , String profile_mail) {
+
+        Users user = new Users(profile_name, profile_mail , profile_pass);
+//        Map<String, Object> users = new HashMap<>();
+//        users.put("username", profile_name);
+//        users.put("password", profile_password);
+        user.setUsername(profile_name);
+        user.setPassword(profile_pass);
+
+        firestore.collection(collectionNames.getUserCollection()).document(firebaseUser.getUid())
+                .set(user)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        finish();
+                        startActivity(new Intent(ProfilePage.this , HomePage.class));
+                    }
+                });
+
+
 
 
     }

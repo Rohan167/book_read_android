@@ -29,12 +29,12 @@
 
         <TextView
             android:id="@+id/user_text"
-            android:layout_width="78dp"
-            android:layout_height="35dp"
+            android:layout_width="111dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginEnd="168dp"
-            android:layout_marginBottom="7dp"
+            android:layout_marginEnd="135dp"
+            android:layout_marginBottom="10dp"
             android:fontFamily="@font/nunito"
             android:textColor="@color/white"
             android:textSize="20dp" />
@@ -57,8 +57,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="83dp"
-        android:layout_marginBottom="366dp"
+        android:layout_marginEnd="82dp"
+        android:layout_marginBottom="416dp"
         android:ems="10"
         android:fontFamily="@font/nunito"
         android:hint="username"
@@ -70,8 +70,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="85dp"
-        android:layout_marginBottom="280dp"
+        android:layout_marginEnd="83dp"
+        android:layout_marginBottom="346dp"
         android:ems="10"
         android:hint="password"
         android:inputType="textPassword" />
@@ -86,5 +86,18 @@
         android:layout_marginBottom="169dp"
         android:fontFamily="@font/nunito"
         android:text="save" />
+
+    <EditText
+        android:id="@+id/email_nav_text"
+        android:layout_width="272dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="81dp"
+        android:layout_marginBottom="281dp"
+        android:ems="10"
+        android:fontFamily="@font/nunito"
+        android:hint="useremail"
+        android:inputType="textPersonName" />
 
 </RelativeLayout>
