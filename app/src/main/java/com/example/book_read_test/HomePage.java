@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,9 +36,10 @@ import java.util.Stack;
 
 public class HomePage extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, NavigationView.OnNavigationItemSelectedListener{
 //    Button logout_btn;
-    TextView welcome_text;
+    TextView welcome_text , like_count_view;
     private DrawerLayout drawer;
     ImageView image_nav_view;
+    ImageButton like_btn , comment_btn;
     TextView user_nav_text;
     FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
@@ -75,6 +77,9 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
 
         image_nav_view = navHeaderView.findViewById(R.id.image_nav_view);
         user_nav_text = navHeaderView.findViewById(R.id.user_nav_text);
+        like_btn = navHeaderView.findViewById(R.id.like_btn);
+        comment_btn = navHeaderView.findViewById(R.id.comment_btn);
+        like_count_view = navHeaderView.findViewById(R.id.like_count_view);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawer, toolbar , R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close);

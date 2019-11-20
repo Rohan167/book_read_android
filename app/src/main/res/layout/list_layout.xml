@@ -1,50 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_add"
         android:layout_width="match_parent"
-        android:layout_marginRight="30dp"
-        android:layout_marginTop="30dp"
-        app:cardCornerRadius="8dp"
+        android:layout_height="223dp"
         android:layout_marginLeft="30dp"
-        android:layout_height="173dp">
-        
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="30dp"
+        app:cardCornerRadius="8dp">
+
         <LinearLayout
-            android:background="@color/white"
             android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:layout_height="match_parent">
-            
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:orientation="horizontal"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:layout_marginTop="20dp"
-                android:layout_height="wrap_content"></LinearLayout>
+            android:layout_height="223dp"
+            android:background="@color/white"
+            android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="339dp"
-                android:layout_height="139dp"
+                android:layout_width="match_parent"
+                android:layout_height="224dp"
                 android:orientation="vertical">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="56dp">
+                    android:layout_height="107dp">
 
                     <ImageView
                         android:id="@+id/book_image"
-                        android:layout_width="133dp"
+                        android:layout_width="99dp"
                         android:layout_height="match_parent"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentEnd="true"
-                        android:layout_marginStart="205dp"
-                        android:layout_marginEnd="1dp"
+                        android:layout_marginStart="132dp"
+                        android:layout_marginEnd="120dp"
                         android:src="@drawable/ic_book" />
                 </RelativeLayout>
 
@@ -67,13 +59,49 @@
 
                 <TextView
                     android:id="@+id/id_view"
-                    android:layout_width="230dp"
-                    android:layout_height="33dp" />
+                    android:layout_width="214dp"
+                    android:layout_height="wrap_content" />
+
+                <LinearLayout
+                    android:id="@+id/like_count_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/like_btn"
+                        android:layout_width="42dp"
+                        android:layout_height="43dp"
+                        android:layout_alignParentStart="true"
+                        android:background="@color/white"
+                        android:src="@drawable/ic_dislike" />
+
+                    <TextView
+                        android:id="@+id/like_text_view"
+                        android:layout_width="153dp"
+                        android:layout_height="69dp"
+                        android:fontFamily="@font/nunito"
+                        android:padding="20dp"
+                        android:text="0  likes"
+                        android:textColor="@color/colorPrimary" />
+
+                    <ImageButton
+                        android:id="@+id/comment_btn"
+                        android:layout_width="52dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="90dp"
+                        android:background="@color/white"
+                        android:src="@drawable/ic_comment" />
+
+                </LinearLayout>
+
+
+
 
             </LinearLayout>
         </LinearLayout>
 
-        
+
     </androidx.cardview.widget.CardView>
 
 
