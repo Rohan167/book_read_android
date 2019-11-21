@@ -31,6 +31,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.squareup.picasso.Picasso;
 
 import java.util.Stack;
 
@@ -105,13 +106,11 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
             }
             case R.id.nav_profile:
             {
-                finish();
                 startActivity(new Intent(HomePage.this , ProfilePage.class));
                 break;
             }
             case R.id.nav_add:
             {
-                finish();
                 startActivity(new Intent(HomePage.this , AddPostActivity.class));
                 break;
             }
@@ -201,6 +200,9 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
                         Users user = task.getResult().toObject(Users.class);
 
                         user_nav_text.setText(user.getUsername());
+
+                        if (user.getUser_image() != null)
+                            Picasso.get().load(user.getUser_image()).into(image_nav_view);
 
                     }
                 });

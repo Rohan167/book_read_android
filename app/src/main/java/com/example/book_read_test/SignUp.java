@@ -103,7 +103,8 @@ public class SignUp extends AppCompatActivity {
                             Users users = new Users(
                                     username,
                                     email,
-                                    password
+                                    password,
+                                    null
                             );
 
                             firestore.collection(collectionNames.getUserCollection())

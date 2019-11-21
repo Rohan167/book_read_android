@@ -7,11 +7,12 @@ public class Users {
     public static final String USERNAME = "username";
     public static final String EMAIL = "email";
     public static final String PASSWORD = "password";
+    public static final String USER_IMAGE = "user_image";
 
     private String username;
     private String email;
     private String password;
-
+    private String user_image;
 
     public Users()
     {
@@ -19,20 +20,12 @@ public class Users {
     }
 
 
-    public Users(String username , String email , String password)
+    public Users(String username , String email , String password, String userimg)
     {
         this.username = username;
         this.email =email;
         this.password = password;
-    }
-
-    public Map<String,Object> getUsersDets() {
-
-        Map<String, Object> userData = new HashMap<>();
-        userData.put(USERNAME, username);
-        userData.put(EMAIL, email);
-        userData.put(PASSWORD, password);
-        return userData;
+        this.user_image = userimg;
     }
 
     //GETTER METHODS
@@ -61,4 +54,13 @@ public class Users {
         this.password = password;
     }
 
+    public void setEmail(String email) {this.email=email;}
+
+    public String getUser_image() {
+        return user_image;
+    }
+
+    public void setUser_image(String user_image) {
+        this.user_image = user_image;
+    }
 }

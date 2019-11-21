@@ -1,23 +1,28 @@
 package com.example.book_read_test;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.book_read_test.models.Posts;
 import com.example.book_read_test.models.Users;
 import com.example.book_read_test.utils.CollectionNames;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -37,6 +42,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.auth.User;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.List;
@@ -61,6 +68,7 @@ public class ProfilePage extends AppCompatActivity {
     ImageButton profileImgChngBtn;
     String username, uid;
     Uri imgUri;
+    ImageView user_img;
 
 
 
@@ -75,9 +83,12 @@ public class ProfilePage extends AppCompatActivity {
         profile_email = findViewById(R.id.email_nav_text);
         user_text = findViewById(R.id.user_text);
         profileImgChngBtn = findViewById(R.id.profileImgChngBtn);
+        user_img = findViewById(R.id.user_img);
 
         firestore = FirebaseFirestore.getInstance();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        firebaseStorage = FirebaseStorage.getInstance();
+        storageReference = firebaseStorage.getReference("userAvatars");
         collectionNames = new CollectionNames();
 
         getUserData();
@@ -86,44 +97,35 @@ public class ProfilePage extends AppCompatActivity {
         save_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Users user = new Users();
+
                 String profile_nm = profile_name.getText().toString().trim();
                 String profile_pass = profile_password.getText().toString().trim();
                 String profile_mail = profile_email.getText().toString().trim();
-                if (profile_nm.isEmpty() || profile_pass.isEmpty())
-                {
-                    Toast.makeText(ProfilePage.this , "ENter Cred" , Toast.LENGTH_LONG).show();
+
+                if (profile_mail.isEmpty() && profile_nm.isEmpty() && profile_pass.isEmpty() && imgUri == null) {
+                    Toast.makeText(ProfilePage.this , "ENter any one Cred" , Toast.LENGTH_LONG).show();
                     return;
                 }
-                updateUser(profile_nm , profile_pass  , profile_mail);
+
+                user.setUsername(profile_nm);
+                user.setPassword(profile_pass);
+                user.setEmail(profile_mail);
+
+                storeProfileImageToFirestore(user);
             }
         });
 
 
-    }
-
-    private void updateUser(String profile_name, String profile_pass , String profile_mail) {
-
-        Users user = new Users(profile_name, profile_mail , profile_pass);
-//        Map<String, Object> users = new HashMap<>();
-//        users.put("username", profile_name);
-//        users.put("password", profile_password);
-        user.setUsername(profile_name);
-        user.setPassword(profile_pass);
-
-        firestore.collection(collectionNames.getUserCollection()).document(firebaseUser.getUid())
-                .set(user)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        finish();
-                        startActivity(new Intent(ProfilePage.this , HomePage.class));
-                    }
-                });
-
-
-
+        profileImgChngBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openFileChooser();
+            }
+        });
 
     }
+
 
     public void getUserData()
     {
@@ -136,8 +138,70 @@ public class ProfilePage extends AppCompatActivity {
 
                         user_text.setText(user.getUsername());
 
+                        if (user.getUser_image() != null) {
+                            Picasso.get().load(user.getUser_image()).into(user_img);
+                        }
+
                     }
                 });
 
+    }
+
+
+    public String getFileExtension(Uri uri) {
+        ContentResolver cr = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cr.getType(uri));
+    }
+
+    private void openFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST &&
+                resultCode == RESULT_OK &&
+                data != null &&
+                data.getData() != null) {
+
+            imgUri = data.getData();
+
+            Picasso.get().load(imgUri).into(user_img);
+        }
+    }
+
+    public void storeProfileImageToFirestore(final Users user) {
+        final StorageReference fileRef = storageReference.child(System.currentTimeMillis() + "." + getFileExtension(imgUri));
+
+        fileRef.putFile(imgUri).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) throw task.getException();
+                return fileRef.getDownloadUrl();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                Uri downloadedUri = task.getResult();
+
+                user.setUser_image(downloadedUri.toString());
+
+                firestore.collection(collectionNames.getUserCollection()).document(firebaseUser.getUid())
+                        .set(user)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                finish();
+                                startActivity(new Intent(ProfilePage.this , HomePage.class));
+                            }
+                        });
+            }
+        });
     }
 }
