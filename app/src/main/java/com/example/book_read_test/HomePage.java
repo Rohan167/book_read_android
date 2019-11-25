@@ -36,8 +36,7 @@ import com.squareup.picasso.Picasso;
 import java.util.Stack;
 
 public class HomePage extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, NavigationView.OnNavigationItemSelectedListener{
-//    Button logout_btn;
-    TextView welcome_text , like_count_view;
+    TextView like_count_view;
     private DrawerLayout drawer;
     ImageView image_nav_view;
     ImageButton like_btn , comment_btn;
@@ -47,7 +46,6 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
     FirebaseFirestore firestore;
     CollectionNames collectionNames;
     Stack<Posts> postsStack;
-    Stack usersStack;
     PostAdapter postAdapter;
     RecyclerView homePostRecyclerView;
     @Override
@@ -143,11 +141,11 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
                         if (task.isSuccessful()) {
 
                             for (QueryDocumentSnapshot doc : task.getResult()) {
-                                Posts posts = new Posts(
-                                    doc.getString("booktitle"),
-                                    doc.getString("bookdesc"),
-                                        doc.getId()
-                                );
+                                Posts posts = new Posts();
+                                posts.setBookName(doc.getString(Posts.BOOK_TITLE));
+                                posts.setBookDescription(doc.getString(Posts.BOOK_DESC));
+                                posts.setDocId(doc.getId());
+                                posts.setPostImage(doc.getString(Posts.POST_IMAGE));
 
                                 postsStack.add(posts);
                             }

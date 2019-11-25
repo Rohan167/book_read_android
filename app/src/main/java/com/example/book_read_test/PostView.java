@@ -78,8 +78,8 @@ public class PostView extends AppCompatActivity {
 
 
     public void deleteData(String id) {
-        Posts p = new Posts(book_name , book_desc , book_id);
-        firestore.collection("posts").document(p.getDocId()).delete()
+
+        firestore.collection("posts").document(id).delete()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {

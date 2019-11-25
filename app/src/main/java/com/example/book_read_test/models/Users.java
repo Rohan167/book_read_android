@@ -14,10 +14,7 @@ public class Users {
     private String password;
     private String user_image;
 
-    public Users()
-    {
-
-    }
+    public Users() {}
 
 
     public Users(String username , String email , String password, String userimg)

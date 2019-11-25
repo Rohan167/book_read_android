@@ -3,12 +3,15 @@ package com.example.book_read_test;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.book_read_test.models.Posts;
+import com.squareup.picasso.Picasso;
 
 import java.util.Stack;
 
@@ -47,7 +50,19 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         holder.bookTitle.setText(postsStack.get(position).getBookName());
         holder.bookDescription.setText(postsStack.get(position).getBookDescription());
-        holder.id_view.setText(postsStack.get(position).getDocId());
+
+        if (postsStack.get(position).getPostImage() != null) {
+            holder.book_image.setVisibility(View.VISIBLE);
+            Picasso.get().load(postsStack.get(position).getPostImage()).into(holder.book_image);
+        }
+
+
+        holder.like_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
     @Override
@@ -57,14 +72,18 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
     class PostViewHolder extends RecyclerView.ViewHolder {
 
-        TextView bookTitle, bookDescription , id_view;
+        TextView bookTitle, bookDescription;
+        ImageButton like_btn, comment_btn;
+        ImageView book_image;
 
         public PostViewHolder(@NonNull View itemView , final OnItemClickListener listener) {
             super(itemView);
 
             bookTitle = itemView.findViewById(R.id.book_title);
             bookDescription = itemView.findViewById(R.id.book_description);
-            id_view  = itemView.findViewById(R.id.id_view);
+            like_btn = itemView.findViewById(R.id.like_btn);
+            comment_btn = itemView.findViewById(R.id.comment_btn);
+            book_image = itemView.findViewById(R.id.book_image);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
