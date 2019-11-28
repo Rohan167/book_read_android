@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.example.book_read_test.models.Posts;
 import com.example.book_read_test.utils.CollectionNames;
@@ -43,6 +44,7 @@ public class UpdatePost extends AppCompatActivity {
         bookNameUpdate = findViewById(R.id.bookTitleUpdate);
         updatePostBtn = findViewById(R.id.updatePostBtn);
 
+
         collectionNames  = new CollectionNames();
 
         firestore = FirebaseFirestore.getInstance();
@@ -68,8 +70,8 @@ public class UpdatePost extends AppCompatActivity {
 
         DocumentReference docRef = firestore.collection(collectionNames.getPostCollection()).document(book_id);
 
-        batch.update(docRef, "booktitle", book_new_name);
-        batch.update(docRef, "bookdesc", book_new_desc);
+        batch.update(docRef, "bookName", book_new_name);
+        batch.update(docRef, "bookDescription", book_new_desc);
 
         batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
