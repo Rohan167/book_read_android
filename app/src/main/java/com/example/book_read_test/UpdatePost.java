@@ -68,7 +68,7 @@ public class UpdatePost extends AppCompatActivity {
 
         WriteBatch batch = firestore.batch();
 
-        DocumentReference docRef = firestore.collection(collectionNames.getPostCollection()).document(book_id);
+        DocumentReference docRef = firestore.collection(CollectionNames.POSTS).document(book_id);
 
         batch.update(docRef, "bookName", book_new_name);
         batch.update(docRef, "bookDescription", book_new_desc);

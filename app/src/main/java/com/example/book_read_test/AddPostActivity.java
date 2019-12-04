@@ -28,6 +28,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -119,6 +120,7 @@ public class AddPostActivity extends AppCompatActivity {
         post.setBookName(booktitle);
         post.setBookDescription(bookdesc);
         post.setUserId(userid);
+        post.setPostLikes(new ArrayList<String>());
 
         if (imgUri != null) {
             final StorageReference fileRef = storageReference.child(System.currentTimeMillis() + "." + getFileExtension(imgUri));
@@ -150,7 +152,7 @@ public class AddPostActivity extends AppCompatActivity {
 
 
     public void insertPostToDatabase(Posts post) {
-        firestore.collection(collNames.getPostCollection())
+        firestore.collection(CollectionNames.POSTS)
                 .add(post)
                 .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                     @Override

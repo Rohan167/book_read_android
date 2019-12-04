@@ -23,6 +23,7 @@ import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SignUp extends AppCompatActivity {
@@ -56,7 +57,7 @@ public class SignUp extends AppCompatActivity {
 //                if (b) {
 //                    //DoNothing
 //                } else {
-                    firestore.collection(collectionNames.getUserCollection()).
+                    firestore.collection(CollectionNames.USERS).
                             whereEqualTo(users.USERNAME, username_signup.getText().toString().trim()).
                             get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
@@ -104,10 +105,11 @@ public class SignUp extends AppCompatActivity {
                                     username,
                                     email,
                                     password,
-                                    null
+                                    null,
+                                    new ArrayList<String>()
                             );
 
-                            firestore.collection(collectionNames.getUserCollection())
+                            firestore.collection(CollectionNames.USERS)
                                     .document(task.getResult().getUser().getUid())
                                     .set(users)
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {

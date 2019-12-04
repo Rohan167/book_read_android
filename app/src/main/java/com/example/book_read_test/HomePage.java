@@ -33,6 +33,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 public class HomePage extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, NavigationView.OnNavigationItemSelectedListener{
@@ -41,28 +43,29 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
     ImageView image_nav_view;
     ImageButton like_btn , comment_btn;
     TextView user_nav_text;
-    FirebaseAuth firebaseAuth;
     FirebaseUser firebaseUser;
     FirebaseFirestore firestore;
     CollectionNames collectionNames;
-    Stack<Posts> postsStack;
     PostAdapter postAdapter;
     RecyclerView homePostRecyclerView;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getAllPosts();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
 
-
         firestore = FirebaseFirestore.getInstance();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         collectionNames = new CollectionNames();
-        postsStack = new Stack<>();
         homePostRecyclerView = findViewById(R.id.homePostRecyclerView);
         homePostRecyclerView.setHasFixedSize(true);
         homePostRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-
 
         Toolbar  toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -107,6 +110,10 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
                 startActivity(new Intent(HomePage.this , ProfilePage.class));
                 break;
             }
+            case R.id.nav_profile_activity: {
+                startActivity(new Intent(HomePage.this, ProfileActivity.class));
+                break;
+            }
             case R.id.nav_add:
             {
                 startActivity(new Intent(HomePage.this , AddPostActivity.class));
@@ -134,11 +141,13 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
 
 
     public void getAllPosts() {
-        firestore.collection(collectionNames.getPostCollection()).get()
+        final List<Posts> postsList = new ArrayList<>();
+
+        firestore.collection(CollectionNames.POSTS).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull final Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
+                        if (task.isSuccessful() && task.getResult() != null) {
 
                             for (QueryDocumentSnapshot doc : task.getResult()) {
                                 Posts posts = new Posts();
@@ -146,11 +155,12 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
                                 posts.setBookDescription(doc.getString(Posts.BOOK_DESC));
                                 posts.setDocId(doc.getId());
                                 posts.setPostImage(doc.getString(Posts.POST_IMAGE));
+                                posts.setPostLikes((List<String>) doc.get(Posts.POST_LIKES));
 
-                                postsStack.add(posts);
+                                postsList.add(posts);
                             }
 
-                            postAdapter = new PostAdapter(HomePage.this, postsStack);
+                            postAdapter = new PostAdapter(HomePage.this, postsList);
                             homePostRecyclerView.setAdapter(postAdapter);
 
                             postAdapter.setOnItemClickListener(new PostAdapter.OnItemClickListener() {
@@ -166,13 +176,11 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
 //
 //                                    }
 
-                                    String val = postsStack.get(position).getDocId();
-                                    String book_name = postsStack.get(position).getBookName();
-                                    String book_desc = postsStack.get(position).getBookDescription();
-                                    Posts get_pos = postsStack.get(position);
+                                    String val = postsList.get(position).getDocId();
+                                    String book_name = postsList.get(position).getBookName();
+                                    String book_desc = postsList.get(position).getBookDescription();
+                                    Posts get_pos = postsList.get(position);
                                     startActivity(new Intent(HomePage.this , PostView.class).putExtra("Id" , val).putExtra("name" , book_name).putExtra("desc",book_desc));
-
-
 
                                 }
                             });
@@ -190,17 +198,19 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
 
     public void getUserDets()
     {
-        firestore.collection(collectionNames.getUserCollection()).document(firebaseUser.getUid())
+        firestore.collection(CollectionNames.USERS).document(firebaseUser.getUid())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        Users user = task.getResult().toObject(Users.class);
+                        if (task.getResult() != null && task.isSuccessful()) {
+                            Users user = task.getResult().toObject(Users.class);
 
-                        user_nav_text.setText(user.getUsername());
+                            user_nav_text.setText(user.getUsername());
 
-                        if (user.getUser_image() != null)
-                            Picasso.get().load(user.getUser_image()).into(image_nav_view);
+                            if (user.getUser_image() != null)
+                                Picasso.get().load(user.getUser_image()).into(image_nav_view);
+                        }
 
                     }
                 });

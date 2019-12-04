@@ -90,7 +90,7 @@ public class PostView extends AppCompatActivity {
     }
 
 //    public void getImage() {
-//        firestore.collection(collectionNames.getPostCollection()).document(book_id)
+//        firestore.collection(CollectionNames.POSTS).document(book_id)
 //                .get()
 //                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
 //                    @Override

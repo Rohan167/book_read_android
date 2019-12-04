@@ -129,7 +129,7 @@ public class ProfilePage extends AppCompatActivity {
 
     public void getUserData()
     {
-        firestore.collection(collectionNames.getUserCollection()).document(firebaseUser.getUid())
+        firestore.collection(CollectionNames.USERS).document(firebaseUser.getUid())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -192,7 +192,7 @@ public class ProfilePage extends AppCompatActivity {
 
                 user.setUser_image(downloadedUri.toString());
 
-                firestore.collection(collectionNames.getUserCollection()).document(firebaseUser.getUid())
+                firestore.collection(CollectionNames.USERS).document(firebaseUser.getUid())
                         .set(user)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
