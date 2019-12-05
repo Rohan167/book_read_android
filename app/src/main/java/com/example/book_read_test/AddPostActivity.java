@@ -17,6 +17,7 @@ import android.widget.ProgressBar;
 
 import com.example.book_read_test.models.Posts;
 import com.example.book_read_test.utils.CollectionNames;
+import com.example.book_read_test.utils.GlobalData;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -39,6 +40,8 @@ public class AddPostActivity extends AppCompatActivity {
     StorageReference storageReference;
     CollectionNames collNames;
 
+    GlobalData globalData;
+
     static final int PICK_IMAGE_REQUEST = 1;
     Uri imgUri;
 
@@ -52,6 +55,7 @@ public class AddPostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_post);
 
+        globalData = (GlobalData) getApplicationContext();
         firestore = FirebaseFirestore.getInstance();
         firebaseStorage = FirebaseStorage.getInstance();
         storageReference = firebaseStorage.getInstance().getReference("bookUploads");
@@ -121,6 +125,7 @@ public class AddPostActivity extends AppCompatActivity {
         post.setBookDescription(bookdesc);
         post.setUserId(userid);
         post.setPostLikes(new ArrayList<String>());
+        post.setPostComments(new ArrayList<String>());
 
         if (imgUri != null) {
             final StorageReference fileRef = storageReference.child(System.currentTimeMillis() + "." + getFileExtension(imgUri));
@@ -151,16 +156,23 @@ public class AddPostActivity extends AppCompatActivity {
     }
 
 
-    public void insertPostToDatabase(Posts post) {
+    public void insertPostToDatabase(final Posts post) {
         firestore.collection(CollectionNames.POSTS)
                 .add(post)
                 .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentReference> task) {
-                        bookPostSubmitBtn.setVisibility(View.VISIBLE);
-                        bookSubmitProgressBar.setVisibility(View.GONE);
-                        finish();
-                        startActivity(new Intent(AddPostActivity.this, HomePage.class));
+                        if (task.isSuccessful() && task.getResult() != null) {
+                            bookPostSubmitBtn.setVisibility(View.VISIBLE);
+                            bookSubmitProgressBar.setVisibility(View.GONE);
+
+                            post.setDocId(task.getResult().getId());
+
+                            globalData.addToAllPost(post.getDocId(), post);
+
+                            finish();
+                            startActivity(new Intent(AddPostActivity.this, HomePage.class));
+                        }
                     }
                 });
     }

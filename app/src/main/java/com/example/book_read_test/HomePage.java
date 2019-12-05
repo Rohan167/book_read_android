@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.example.book_read_test.models.Posts;
 import com.example.book_read_test.models.Users;
 import com.example.book_read_test.utils.CollectionNames;
+import com.example.book_read_test.utils.GlobalData;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -49,6 +50,8 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
     PostAdapter postAdapter;
     RecyclerView homePostRecyclerView;
 
+    GlobalData globalData;
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -60,12 +63,18 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
 
+        globalData = (GlobalData) getApplicationContext();
+
         firestore = FirebaseFirestore.getInstance();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         collectionNames = new CollectionNames();
         homePostRecyclerView = findViewById(R.id.homePostRecyclerView);
         homePostRecyclerView.setHasFixedSize(true);
         homePostRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        globalData.setAllPosts();
+        globalData.setLoggedInUserData();
+        globalData.setUserAllComments();
 
         Toolbar  toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

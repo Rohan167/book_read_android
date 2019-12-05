@@ -13,6 +13,7 @@ public class Users {
     public static final String USER_IMAGE = "user_image";
     public static final String FAV_POSTS = "favPosts";
 
+    private String userId;
     private String username;
     private String email;
     private String password;
@@ -73,5 +74,13 @@ public class Users {
 
     public void setFavPosts(List<String> favPosts) {
         this.favPosts = favPosts;
+    }
+
+    public String _getUserId() {
+        return userId;
+    }
+
+    public void _setUserId(String userId) {
+        this.userId = userId;
     }
 }

@@ -1,6 +1,7 @@
 package com.example.book_read_test;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.book_read_test.models.Posts;
 import com.example.book_read_test.models.Users;
 import com.example.book_read_test.utils.CollectionNames;
+import com.example.book_read_test.utils.GlobalData;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,6 +34,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     WriteBatch batch;
     Context context;
     List<Posts> postsList;
+    GlobalData globalData;
 
     private OnItemClickListener mListener;
 
@@ -50,6 +53,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         this.postsList = posts;
         this.firestore = FirebaseFirestore.getInstance();
         this.batch = firestore.batch();
+        this.globalData = (GlobalData) context.getApplicationContext();
     }
 
 
@@ -62,7 +66,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final PostViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final PostViewHolder holder, final int position) {
         final String THIS_POST_ID = postsList.get(position).getDocId();
         final String LOGGED_IN_UID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         final DocumentReference userDocRef = firestore.collection(CollectionNames.USERS).document(LOGGED_IN_UID);
@@ -83,6 +87,19 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         }
 
 
+        holder.comment_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                context.startActivity(new Intent(context, CommentActivity.class)
+                    .putExtra(Posts.DOC_ID, postsList.get(position).getDocId()));
+            }
+        });
+
+        if (postsList.get(position).getPostComments() != null) {
+            holder.postCommentCountTV.setText(Integer.toString(postsList.get(position).getPostComments().size()));
+        }
+
+
         holder.like_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -95,6 +112,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                         if (task.isSuccessful()) {
                             holder.like_btn.setVisibility(View.GONE);
                             holder.unlike_btn.setVisibility(View.VISIBLE);
+
+                            globalData.getLoggedInUserData().getFavPosts().add(THIS_POST_ID);
+                            globalData.getAllPosts().get(THIS_POST_ID).getPostLikes().add(LOGGED_IN_UID);
+
                             int postLikeCount = Integer.parseInt(holder.like_text_view.getText().toString());
                             holder.like_text_view.setText(Integer.toString(postLikeCount + 1));
                         }
@@ -115,6 +136,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                         if (task.isSuccessful()) {
                             holder.like_btn.setVisibility(View.VISIBLE);
                             holder.unlike_btn.setVisibility(View.GONE);
+
+                            globalData.getLoggedInUserData().getFavPosts().remove(THIS_POST_ID);
+                            globalData.getAllPosts().get(THIS_POST_ID).getPostLikes().remove(LOGGED_IN_UID);
+
                             int postLikeCount = Integer.parseInt(holder.like_text_view.getText().toString());
                             holder.like_text_view.setText(Integer.toString(postLikeCount - 1));
                         }

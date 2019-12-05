@@ -10,6 +10,7 @@ public class Posts {
     public static final String POST_IMAGE = "postImage";
     public static final String DOC_ID = "docId";
     public static final String POST_LIKES = "postLikes";
+    public static final String POST_COMMENTS = "postComments";
 
     private String bookTitle;
     private String bookDescription;
@@ -17,6 +18,7 @@ public class Posts {
     private String postImage;
     private String userId;
     private List<String> postLikes;
+    private List<String> postComments;
 
     public Posts() {}
 
@@ -43,18 +45,6 @@ public class Posts {
     public void setBookDescription(String bookDescription) {
         this.bookDescription = bookDescription;
     }
-
-//
-//    @Exclude
-//    public Map<String , Object> toMap()
-//    {
-//        HashMap<String , Object> result = new HashMap<>();
-//
-//        result.put("bookdesc" , bookDescription);
-//        result.put("booktitle", bookTitle);
-//
-//        return result;
-//    }
 
     public String getPostImage() {
         return postImage;
@@ -86,5 +76,13 @@ public class Posts {
 
     public void setPostLikes(List<String> postLikes) {
         this.postLikes = postLikes;
+    }
+
+    public List<String> getPostComments() {
+        return postComments;
+    }
+
+    public void setPostComments(List<String> postComments) {
+        this.postComments = postComments;
     }
 }

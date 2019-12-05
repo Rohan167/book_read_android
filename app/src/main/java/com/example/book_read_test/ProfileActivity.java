@@ -6,9 +6,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -73,14 +75,6 @@ public class ProfileActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful() && task.getResult() != null) {
-//                            DocumentSnapshot doc = task.getResult();
-//
-//                            Users user = new Users();
-//                            user.setEmail(doc.getString(Users.EMAIL));
-//                            user.setUser_image(doc.getString(Users.USER_IMAGE));
-//                            user.setUsername(doc.getString(Users.USERNAME));
-//                            user.setFavPosts((List<String>)doc.get(Users.FAV_POSTS));
-
                             Users user = task.getResult().toObject(Users.class);
 
                             Log.d("PROFILE", user.getEmail());
@@ -128,5 +122,12 @@ public class ProfileActivity extends AppCompatActivity {
                             }
                     }
                 });
+
+        profileFavCountWrapperLL.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ProfileActivity.this, FavPostsActivity.class));
+            }
+        });
     }
 }
