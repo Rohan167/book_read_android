@@ -165,6 +165,7 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
                                 posts.setDocId(doc.getId());
                                 posts.setPostImage(doc.getString(Posts.POST_IMAGE));
                                 posts.setPostLikes((List<String>) doc.get(Posts.POST_LIKES));
+                                posts.setPostComments((List<String>) doc.get(Posts.POST_COMMENTS));
 
                                 postsList.add(posts);
                             }

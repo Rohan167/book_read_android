@@ -1,6 +1,7 @@
 package com.example.book_read_test.utils;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -20,8 +21,6 @@ import java.util.List;
 
 public class GlobalData extends Application {
 
-    private FirebaseFirestore firestore;
-
     private HashMap<String, Posts> allPosts = new HashMap<>();
     private Users loggedInUserData = new Users();
     private HashMap<String, Comments> userAllComments = new HashMap<>();
@@ -32,9 +31,7 @@ public class GlobalData extends Application {
     }
 
     public void setAllPosts() {
-        firestore = FirebaseFirestore.getInstance();
-
-        firestore.collection(CollectionNames.POSTS).get()
+        FirebaseFirestore.getInstance().collection(CollectionNames.POSTS).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -47,6 +44,8 @@ public class GlobalData extends Application {
                                 posts.setPostImage(doc.getString(Posts.POST_IMAGE));
                                 posts.setPostLikes((List<String>) doc.get(Posts.POST_LIKES));
                                 posts.setPostComments((List<String>) doc.get(Posts.POST_COMMENTS));
+
+                                Log.d("GLOBAL_DATA", doc.get(Posts.POST_COMMENTS).toString());
 
                                 allPosts.put(doc.getId(), posts);
                             }
@@ -68,7 +67,7 @@ public class GlobalData extends Application {
     }
 
     public void setLoggedInUserData() {
-        firestore.collection(CollectionNames.USERS)
+        FirebaseFirestore.getInstance().collection(CollectionNames.USERS)
                 .document(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -92,7 +91,7 @@ public class GlobalData extends Application {
     }
 
     public void setUserAllComments() {
-        firestore.collection(CollectionNames.COMMENTS)
+        FirebaseFirestore.getInstance().collection(CollectionNames.COMMENTS)
                 .whereEqualTo(Users.USER_ID, FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

@@ -76,6 +76,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         holder.bookDescription.setText(postsList.get(position).getBookDescription());
         holder.like_text_view.setText(Integer.toString(postsList.get(position).getPostLikes().size()));
 
+        holder.postCommentCountTV.setText(Integer.toString(postsList.get(position).getPostComments().size()));
+
         if (postsList.get(position).getPostLikes().contains(LOGGED_IN_UID)) {
             holder.like_btn.setVisibility(View.GONE);
             holder.unlike_btn.setVisibility(View.VISIBLE);

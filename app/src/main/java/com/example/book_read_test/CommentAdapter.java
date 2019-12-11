@@ -36,7 +36,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final CommentViewHolder holder, final int position) {
         holder.commentTV.setText(commentsList.get(position).getComment());
         holder.cmntUsername.setText(commentsList.get(position).getUsername());
 
@@ -46,26 +46,39 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
         if (commentsList.get(position).getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
             holder.cmntMoreBtn.setVisibility(View.VISIBLE);
-
-            PopupMenu popup = new PopupMenu(context, holder.cmntMoreBtn);
-            popup.inflate(R.menu.edit_delete_menu);
-
-//            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-//                @Override
-//                public boolean onMenuItemClick(MenuItem menuItem) {
-//                    switch (menuItem.getItemId()) {
-//                        case R.id.edit_post: {
-//                            break;
-//                        }
-//                        case R.id.delete_post: {
-//                            break;
-//                        }
-//                    }
-//
-//                    return false;
-//                }
-//            });
         }
+
+        holder.cmntMoreBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PopupMenu popup = new PopupMenu(context, holder.cmntMoreBtn);
+                popup.inflate(R.menu.edit_delete_menu);
+
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem menuItem) {
+                        switch (menuItem.getItemId()) {
+                            case R.id.edit_post: {
+                                context.editComment(
+                                        commentsList.get(position)._getCommentId(),
+                                        commentsList.get(position).getComment(),
+                                        position
+                                );
+                                break;
+                            }
+                            case R.id.delete_post: {
+                                context.deleteComment(commentsList.get(position)._getCommentId(), position);
+                                break;
+                            }
+                        }
+
+                        return false;
+                    }
+                });
+
+                popup.show();
+            }
+        });
     }
 
     @Override

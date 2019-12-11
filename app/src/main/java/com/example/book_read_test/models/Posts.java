@@ -85,4 +85,12 @@ public class Posts {
     public void setPostComments(List<String> postComments) {
         this.postComments = postComments;
     }
+
+    public void _addPostComments(String cmntId) {
+        this.postComments.add(cmntId);
+    }
+
+    public void _removePostComments(String cmntId) {
+        this.postComments.remove(cmntId);
+    }
 }

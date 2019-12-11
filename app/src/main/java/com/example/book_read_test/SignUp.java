@@ -5,11 +5,17 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.audiofx.Visualizer;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.book_read_test.models.Users;
@@ -21,6 +27,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -35,6 +42,10 @@ public class SignUp extends AppCompatActivity {
     FirebaseFirestore firestore;
     CollectionNames collectionNames;
     Users users;
+    TextView usernameErrMsgTV;
+    ImageView usernameValidImageView;
+
+    List<String> allUsernames;
 
 
     @Override
@@ -45,11 +56,26 @@ public class SignUp extends AppCompatActivity {
         firestore = FirebaseFirestore.getInstance();
         collectionNames = new CollectionNames();
         users = new Users();
+        allUsernames = new ArrayList<>();
 
         username_signup = findViewById(R.id.username_signup);
         email_signup = findViewById(R.id.email_signup);
         password_signup = findViewById(R.id.password_signup);
         sign_up = findViewById(R.id.register_button);
+        usernameErrMsgTV = findViewById(R.id.usernameErrMsgTV);
+        usernameValidImageView = findViewById(R.id.usernameValidImageView);
+
+        firestore.collection(CollectionNames.USERS).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.getResult() != null && task.isSuccessful()) {
+                            for (QueryDocumentSnapshot doc : task.getResult()) {
+                                allUsernames.add(doc.getString(Users.USERNAME));
+                            }
+                        }
+                    }
+                });
 
 //        username_signup.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 //            @Override
@@ -86,6 +112,36 @@ public class SignUp extends AppCompatActivity {
 
                 createNewUser(username , email , password);
 
+            }
+        });
+
+
+        username_signup.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().length() < 1) {
+                    usernameValidImageView.setVisibility(View.GONE);
+                }
+
+                if (allUsernames.contains(editable.toString())) {
+                    usernameErrMsgTV.setVisibility(View.VISIBLE);
+                    usernameErrMsgTV.setText(editable.toString() + " already exists!");
+                    usernameValidImageView.setVisibility(View.GONE);
+                }
+                else {
+                    usernameErrMsgTV.setVisibility(View.GONE);
+                    usernameErrMsgTV.setText("");
+                    usernameValidImageView.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
