@@ -42,10 +42,10 @@ public class SignUp extends AppCompatActivity {
     FirebaseFirestore firestore;
     CollectionNames collectionNames;
     Users users;
-    TextView usernameErrMsgTV;
-    ImageView usernameValidImageView;
+    TextView usernameErrMsgTV, emailErrMsgTV;
+    ImageView usernameValidImageView, emailValidImageView;
 
-    List<String> allUsernames;
+    List<String> allUsernames, allEmails;
 
 
     @Override
@@ -57,13 +57,16 @@ public class SignUp extends AppCompatActivity {
         collectionNames = new CollectionNames();
         users = new Users();
         allUsernames = new ArrayList<>();
+        allEmails = new ArrayList<>();
 
         username_signup = findViewById(R.id.username_signup);
         email_signup = findViewById(R.id.email_signup);
         password_signup = findViewById(R.id.password_signup);
         sign_up = findViewById(R.id.register_button);
         usernameErrMsgTV = findViewById(R.id.usernameErrMsgTV);
+        emailErrMsgTV = findViewById(R.id.emailErrMsgTV);
         usernameValidImageView = findViewById(R.id.usernameValidImageView);
+        emailValidImageView = findViewById(R.id.emailValidImageView);
 
         firestore.collection(CollectionNames.USERS).get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -72,6 +75,7 @@ public class SignUp extends AppCompatActivity {
                         if (task.getResult() != null && task.isSuccessful()) {
                             for (QueryDocumentSnapshot doc : task.getResult()) {
                                 allUsernames.add(doc.getString(Users.USERNAME));
+                                allEmails.add(doc.getString(Users.EMAIL));
                             }
                         }
                     }
@@ -110,11 +114,42 @@ public class SignUp extends AppCompatActivity {
                 String email = email_signup.getText().toString().trim();
                 String password = password_signup.getText().toString().trim();
 
-                createNewUser(username , email , password);
+                if (usernameErrMsgTV.getVisibility() == View.GONE && emailErrMsgTV.getVisibility() == View.GONE) {
+                    createNewUser(username , email , password);
+                }
+                else {
+                    Toast.makeText(SignUp.this, "USername or email already exists", Toast.LENGTH_LONG).show();
+                }
 
             }
         });
 
+
+        email_signup.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (allEmails.contains(editable.toString())) {
+                    emailErrMsgTV.setVisibility(View.VISIBLE);
+                    emailErrMsgTV.setText(editable.toString() + " already exists!");
+                    emailValidImageView.setVisibility(View.GONE);
+                }
+                else {
+                    emailErrMsgTV.setVisibility(View.GONE);
+                    emailErrMsgTV.setText("");
+                    emailValidImageView.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 
         username_signup.addTextChangedListener(new TextWatcher() {
             @Override
