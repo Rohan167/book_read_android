@@ -72,6 +72,7 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
         homePostRecyclerView.setHasFixedSize(true);
         homePostRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        globalData.setAllUsersData();
         globalData.setAllPosts();
         globalData.setLoggedInUserData();
         globalData.setUserAllComments();

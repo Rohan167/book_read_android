@@ -60,8 +60,6 @@ public class UpdatePost extends AppCompatActivity {
             }
         });
 
-
-
     }
 
     private void updatePost(String book_id , String book_new_name , String book_new_desc) {

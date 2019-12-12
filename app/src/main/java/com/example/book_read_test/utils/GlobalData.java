@@ -15,6 +15,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +25,7 @@ public class GlobalData extends Application {
     private HashMap<String, Posts> allPosts = new HashMap<>();
     private Users loggedInUserData = new Users();
     private HashMap<String, Comments> userAllComments = new HashMap<>();
+    private HashMap<String, Users> allUsersData = new HashMap<>();
 
 
     public HashMap<String, Posts> getAllPosts() {
@@ -92,7 +94,6 @@ public class GlobalData extends Application {
 
     public void setUserAllComments() {
         FirebaseFirestore.getInstance().collection(CollectionNames.COMMENTS)
-                .whereEqualTo(Users.USER_ID, FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -104,9 +105,40 @@ public class GlobalData extends Application {
                                 comment._setCommentId(doc.getId());
                                 comment.setComment(doc.getString(Comments.COMMENT));
                                 comment.setUserId(doc.getString(Users.USER_ID));
-                                comment.setUserAvatar(doc.getString(Users.USER_IMAGE));
+                                comment._setUser_image(allUsersData.get(doc.getString(Users.USER_ID)).getUser_image());
+                                comment.setPostId(doc.getString(Posts.DOC_ID));
+                                comment._setUsername(allUsersData.get(doc.getString(Users.USER_ID)).getUsername());
 
                                 userAllComments.put(doc.getId(), comment);
+                            }
+
+                            Log.d("GLOBAL_DATA", new Gson().toJson(userAllComments));
+                        }
+                    }
+                });
+    }
+
+    public HashMap<String, Users> getAllUsersData() {
+        return allUsersData;
+    }
+
+    public void setAllUsersData() {
+        FirebaseFirestore.getInstance().collection(CollectionNames.USERS)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.getResult() != null && task.isSuccessful()) {
+                            for (QueryDocumentSnapshot doc : task.getResult()) {
+                                Users user = new Users();
+
+                                user._setUserId(doc.getId());
+                                user.setUser_image(doc.getString(Users.USER_IMAGE));
+                                user.setUsername(doc.getString(Users.USERNAME));
+                                user.setEmail(doc.getString(Users.EMAIL));
+                                user.setFavPosts((List<String>)doc.get(Users.FAV_POSTS));
+
+                                allUsersData.put(doc.getId(), user);
                             }
                         }
                     }

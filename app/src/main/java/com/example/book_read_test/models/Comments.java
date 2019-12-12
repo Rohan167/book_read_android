@@ -10,7 +10,7 @@ public class Comments {
     private String userId;
     private String postId;
     private String username;
-    private String userAvatar;
+    private String user_image;
 
     public String _getCommentId() {
         return commentId;
@@ -36,20 +36,20 @@ public class Comments {
         this.userId = userId;
     }
 
-    public String getUsername() {
+    public String _getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
+    public void _setUsername(String username) {
         this.username = username;
     }
 
-    public String getUserAvatar() {
-        return userAvatar;
+    public String _getUser_image() {
+        return user_image;
     }
 
-    public void setUserAvatar(String userAvatar) {
-        this.userAvatar = userAvatar;
+    public void _setUser_image(String user_image) {
+        this.user_image = user_image;
     }
 
     public String getPostId() {

@@ -7,12 +7,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -28,10 +26,10 @@ import com.example.book_read_test.utils.GlobalData;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.WriteBatch;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -44,6 +42,7 @@ public class CommentActivity extends AppCompatActivity {
     GlobalData globalData;
     HashMap<String, Comments> allComments;
     HashMap<String, Posts> allPosts;
+    HashMap<String, Users> allUsersData;
     List<Comments> commentsList;
     CommentAdapter commentAdapter;
     WriteBatch batch;
@@ -70,6 +69,7 @@ public class CommentActivity extends AppCompatActivity {
         globalData = (GlobalData) getApplicationContext();
         allComments = globalData.getUserAllComments();
         allPosts = globalData.getAllPosts();
+        allUsersData = globalData.getAllUsersData();
         loggedInUser = globalData.getLoggedInUserData();
         commentsList = new ArrayList<>();
 
@@ -99,13 +99,14 @@ public class CommentActivity extends AppCompatActivity {
         for (String id : allPosts.get(SELECTED_POST_ID).getPostComments()) {
             commentsList.add(allComments.get(id));
         }
-
-        commentAdapter = new CommentAdapter(CommentActivity.this, commentsList);
-        commentRecyclerView.setAdapter(commentAdapter);
+            Log.d("COMMENT_ACT", new Gson().toJson(allComments));
+            Log.d("COMMENT_ACT", new Gson().toJson(commentsList));
 
         if (commentsList.size() > 0) {
             cmntProgressBar.setVisibility(View.GONE);
             commentRecyclerView.setVisibility(View.VISIBLE);
+            commentAdapter = new CommentAdapter(CommentActivity.this, commentsList);
+            commentRecyclerView.setAdapter(commentAdapter);
         }
         else {
             cmntProgressBar.setVisibility(View.GONE);
@@ -118,9 +119,9 @@ public class CommentActivity extends AppCompatActivity {
             public void onClick(View view) {
                 final Comments cmnt = new Comments();
                 cmnt.setComment(commentET.getText().toString());
-                cmnt.setUserAvatar(loggedInUser.getUser_image());
+                cmnt._setUser_image(loggedInUser.getUser_image());
                 cmnt.setUserId(loggedInUser._getUserId());
-                cmnt.setUsername(loggedInUser.getUsername());
+                cmnt._setUsername(loggedInUser.getUsername());
                 cmnt.setPostId(SELECTED_POST_ID);
 
                 if (cmnt.getComment() != null) {

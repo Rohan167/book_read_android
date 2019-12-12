@@ -109,7 +109,6 @@ public class SignUp extends AppCompatActivity {
         sign_up.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 String username = username_signup.getText().toString().trim();
                 String email = email_signup.getText().toString().trim();
                 String password = password_signup.getText().toString().trim();
@@ -120,7 +119,6 @@ public class SignUp extends AppCompatActivity {
                 else {
                     Toast.makeText(SignUp.this, "USername or email already exists", Toast.LENGTH_LONG).show();
                 }
-
             }
         });
 

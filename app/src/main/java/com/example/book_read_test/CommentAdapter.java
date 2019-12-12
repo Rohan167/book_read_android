@@ -1,6 +1,5 @@
 package com.example.book_read_test;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,10 +37,10 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     @Override
     public void onBindViewHolder(@NonNull final CommentViewHolder holder, final int position) {
         holder.commentTV.setText(commentsList.get(position).getComment());
-        holder.cmntUsername.setText(commentsList.get(position).getUsername());
+        holder.cmntUsername.setText(commentsList.get(position)._getUsername());
 
-        if (commentsList.get(position).getUserAvatar() != null) {
-            Picasso.get().load(commentsList.get(position).getUserAvatar()).into(holder.cmntUserAvatarIV);
+        if (commentsList.get(position)._getUser_image() != null) {
+            Picasso.get().load(commentsList.get(position)._getUser_image()).into(holder.cmntUserAvatarIV);
         }
 
         if (commentsList.get(position).getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
