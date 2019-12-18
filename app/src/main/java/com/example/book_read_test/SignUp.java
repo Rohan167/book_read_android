@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +45,7 @@ public class SignUp extends AppCompatActivity {
     Users users;
     TextView usernameErrMsgTV, emailErrMsgTV;
     ImageView usernameValidImageView, emailValidImageView;
+    ProgressBar signupProgressBar;
 
     List<String> allUsernames, allEmails;
 
@@ -59,6 +61,7 @@ public class SignUp extends AppCompatActivity {
         allUsernames = new ArrayList<>();
         allEmails = new ArrayList<>();
 
+        signupProgressBar = findViewById(R.id.signupProgressBar);
         username_signup = findViewById(R.id.username_signup);
         email_signup = findViewById(R.id.email_signup);
         password_signup = findViewById(R.id.password_signup);
@@ -114,6 +117,8 @@ public class SignUp extends AppCompatActivity {
                 String password = password_signup.getText().toString().trim();
 
                 if (usernameErrMsgTV.getVisibility() == View.GONE && emailErrMsgTV.getVisibility() == View.GONE) {
+                    sign_up.setVisibility(View.INVISIBLE);
+                    signupProgressBar.setVisibility(View.VISIBLE);
                     createNewUser(username , email , password);
                 }
                 else {
@@ -205,6 +210,7 @@ public class SignUp extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             sign_up.setVisibility(View.VISIBLE);
+                                            signupProgressBar.setVisibility(View.GONE);
                                             startActivity(new Intent(SignUp.this , HomePage.class));
                                             finish();
                                         }

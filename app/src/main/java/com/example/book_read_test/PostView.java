@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -37,7 +38,7 @@ public class PostView extends AppCompatActivity {
     CollectionNames collectionNames;
 
     Button del_btn , updt_btn;
-    String book_name, book_desc , book_id;
+    String book_name, book_desc , book_id, post_img;
     ImageView book_image;
 
 
@@ -49,7 +50,8 @@ public class PostView extends AppCompatActivity {
         book_name = getIntent().getStringExtra("name");
         book_desc = getIntent().getStringExtra("desc");
         book_id = getIntent().getStringExtra("Id");
-        book_image = findViewById(R.id.bookImageView);
+        post_img = getIntent().getStringExtra("book_image");
+        book_image = findViewById(R.id.book_image_view);
 
 
 
@@ -65,14 +67,15 @@ public class PostView extends AppCompatActivity {
         id_view.setText(book_id);
         bookname_view.setText(book_name);
         bookdesc_view.setText(book_desc);
-//        getImage();
+
+        if (post_img != null) {
+            Picasso.get().load(post_img).into(book_image);
+        }
 
         del_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String value = bookname_view.getText().toString();
-
-                getDocIdDel(value);
+                deleteData(book_id);
             }
         });
 
@@ -84,6 +87,8 @@ public class PostView extends AppCompatActivity {
                 startActivity(new Intent(PostView.this , UpdatePost.class).putExtra("bookid", val));
             }
         });
+
+
 
 
 
@@ -108,35 +113,39 @@ public class PostView extends AppCompatActivity {
 
     public void deleteData(String id) {
 //        Posts posts = new Posts();
-
-        firestore.collection("posts").document(id).delete()
+        Log.d("POST_VIEW", "deleted id : " + id);
+        firestore.collection(CollectionNames.POSTS).document(id).delete()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        Toast.makeText(PostView.this, "Deleted DONE", Toast.LENGTH_LONG).show();
-                        startActivity(new Intent(PostView.this, HomePage.class));
+                        if (task.isSuccessful()) {
+                            Toast.makeText(PostView.this, "Deleted DONE", Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(PostView.this, HomePage.class));
+                        } else {
+                            Log.d("POST_VIEW", task.getException().getMessage());
+                        }
                     }
                 });
     }
 
 
 
-    public void getDocIdDel(String value) {
-        final String[] itemID = {null};
-
-
-        firestore.collection("posts").whereEqualTo("bookName", value).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    for (QueryDocumentSnapshot doc : task.getResult()) {
-                        itemID[0] = doc.getId();
-                    }
-                    deleteData(itemID[0]);
-                }
-            }
-        });
-
-    }
+//    public void getDocIdDel(String value) {
+//        final String[] itemID = {null};
+//
+//
+//        firestore.collection("posts").whereEqualTo("bookName", value).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    for (QueryDocumentSnapshot doc : task.getResult()) {
+//                        itemID[0] = doc.getId();
+//                    }
+//                    deleteData(itemID[0]);
+//                }
+//            }
+//        });
+//
+//    }
 
 }

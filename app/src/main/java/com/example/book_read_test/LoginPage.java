@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -23,6 +24,7 @@ public class LoginPage extends AppCompatActivity {
     EditText password_login;
     Button login_btn;
     FirebaseAuth firebaseAuth;
+    ProgressBar loginProgressBar;
 
     @Override
     protected void onStart() {
@@ -48,6 +50,7 @@ public class LoginPage extends AppCompatActivity {
         password_login = findViewById(R.id.password_login);
         login_btn = findViewById(R.id.login_btn);
         firebaseAuth = FirebaseAuth.getInstance();
+        loginProgressBar = findViewById(R.id.loginProgressBar);
 
         login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,6 +69,8 @@ public class LoginPage extends AppCompatActivity {
                 }
                 else
                 {
+                    login_btn.setVisibility(View.INVISIBLE);
+                    loginProgressBar.setVisibility(View.VISIBLE);
                     loginUser(email , password);
                 }
 
@@ -93,13 +98,15 @@ public class LoginPage extends AppCompatActivity {
 
                 if (task.isSuccessful())
                 {
+                    login_btn.setVisibility(View.VISIBLE);
+                    loginProgressBar.setVisibility(View.GONE);
                     startActivity(new Intent(LoginPage.this , HomePage.class));
                     finish();
                 }
                 else
                 {
                     Toast.makeText(LoginPage.this, "This is embarassing", Toast.LENGTH_LONG).show();
-                    Log.d("Login error ", String.valueOf(task.getResult()));
+                    Log.d("Login error ", task.getException().getMessage());
                 }
 
             }

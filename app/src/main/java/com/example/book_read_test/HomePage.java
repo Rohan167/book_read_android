@@ -8,6 +8,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -49,6 +50,7 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
     CollectionNames collectionNames;
     PostAdapter postAdapter;
     RecyclerView homePostRecyclerView;
+    SwipeRefreshLayout homeSwipeRefresh;
 
     GlobalData globalData;
 
@@ -69,8 +71,11 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         collectionNames = new CollectionNames();
         homePostRecyclerView = findViewById(R.id.homePostRecyclerView);
+        homeSwipeRefresh = findViewById(R.id.homeSwipeRefresh);
         homePostRecyclerView.setHasFixedSize(true);
         homePostRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        homeSwipeRefresh.setRefreshing(true);
 
         globalData.setAllUsersData();
         globalData.setAllPosts();
@@ -165,14 +170,16 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
                                 posts.setBookDescription(doc.getString(Posts.BOOK_DESC));
                                 posts.setDocId(doc.getId());
                                 posts.setPostImage(doc.getString(Posts.POST_IMAGE));
-                                posts.setPostLikes((List<String>) doc.get(Posts.POST_LIKES));
-                                posts.setPostComments((List<String>) doc.get(Posts.POST_COMMENTS));
+                                posts.setPostLikes((List) doc.get(Posts.POST_LIKES));
+                                posts.setPostComments((List) doc.get(Posts.POST_COMMENTS));
 
                                 postsList.add(posts);
                             }
 
                             postAdapter = new PostAdapter(HomePage.this, postsList);
                             homePostRecyclerView.setAdapter(postAdapter);
+
+                            homeSwipeRefresh.setRefreshing(false);
 
                             postAdapter.setOnItemClickListener(new PostAdapter.OnItemClickListener() {
                                 @Override
@@ -190,8 +197,9 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
                                     String val = postsList.get(position).getDocId();
                                     String book_name = postsList.get(position).getBookName();
                                     String book_desc = postsList.get(position).getBookDescription();
+                                    String book_image = postsList.get(position).getPostImage();
                                     Posts get_pos = postsList.get(position);
-                                    startActivity(new Intent(HomePage.this , PostView.class).putExtra("Id" , val).putExtra("name" , book_name).putExtra("desc",book_desc));
+                                    startActivity(new Intent(HomePage.this , PostView.class).putExtra("Id" , val).putExtra("name" , book_name).putExtra("desc",book_desc).putExtra("book_image", book_image));
 
                                 }
                             });
