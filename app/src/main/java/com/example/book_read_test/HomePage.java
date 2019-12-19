@@ -172,6 +172,7 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
                                 posts.setPostImage(doc.getString(Posts.POST_IMAGE));
                                 posts.setPostLikes((List) doc.get(Posts.POST_LIKES));
                                 posts.setPostComments((List) doc.get(Posts.POST_COMMENTS));
+                                posts.setUserId(doc.getString(Users.USER_ID));
 
                                 postsList.add(posts);
                             }
@@ -198,8 +199,9 @@ public class HomePage extends AppCompatActivity implements BottomNavigationView.
                                     String book_name = postsList.get(position).getBookName();
                                     String book_desc = postsList.get(position).getBookDescription();
                                     String book_image = postsList.get(position).getPostImage();
+                                    String post_user_id = postsList.get(position).getUserId();
                                     Posts get_pos = postsList.get(position);
-                                    startActivity(new Intent(HomePage.this , PostView.class).putExtra("Id" , val).putExtra("name" , book_name).putExtra("desc",book_desc).putExtra("book_image", book_image));
+                                    startActivity(new Intent(HomePage.this , PostView.class).putExtra("postUserId", post_user_id).putExtra("Id" , val).putExtra("name" , book_name).putExtra("desc",book_desc).putExtra("book_image", book_image));
 
                                 }
                             });

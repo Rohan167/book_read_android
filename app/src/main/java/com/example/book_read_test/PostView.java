@@ -40,6 +40,7 @@ public class PostView extends AppCompatActivity {
     Button del_btn , updt_btn;
     String book_name, book_desc , book_id, post_img;
     ImageView book_image;
+    String uid;
 
 
     @Override
@@ -51,6 +52,7 @@ public class PostView extends AppCompatActivity {
         book_desc = getIntent().getStringExtra("desc");
         book_id = getIntent().getStringExtra("Id");
         post_img = getIntent().getStringExtra("book_image");
+        uid = getIntent().getStringExtra("postUserId");
         book_image = findViewById(R.id.book_image_view);
 
 
@@ -78,6 +80,19 @@ public class PostView extends AppCompatActivity {
                 deleteData(book_id);
             }
         });
+
+        final Posts posts = new Posts();
+
+        String logged_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
+//
+//        Log.d("POST_VIEW", "post uid : " + uid + " loggedin : " + logged_id);
+
+        if (!logged_id.equals(uid))
+        {
+            Log.d("POST_VEIW", updt_btn.isEnabled() + " post UID: " + uid);
+            updt_btn.setVisibility(View.GONE);
+            del_btn.setVisibility(View.GONE);
+        }
 
 
         updt_btn.setOnClickListener(new View.OnClickListener() {
